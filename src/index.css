@@ -1,0 +1,65 @@
+:root {
+  /* Primary Colors */
+  --color-primary: #A8C4A2;
+  --color-primary-light: #B8CFAE;
+  --color-primary-dark: #7A9B6E;
+
+  /* Secondary Colors */
+  --color-secondary: #F5F2E8;
+  --color-accent: #E8967A;
+
+  /* Background Colors */
+  --color-bg-primary: #B8CFAE;
+  --color-bg-secondary: #F7F4EA;
+
+  /* Text Colors */
+  --color-text-primary: #4A6142;
+  --color-text-secondary: #5C7A54;
+  --color-text-muted: #8FAF82;
+
+  /* Border Colors */
+  --color-border: #6B8F60;
+  --color-border-light: #DCE5D3;
+
+  /* Interactive Colors */
+  --color-button-primary: #7A9B6E;
+  --color-button-hover: #5C7A54;
+  --color-link: #E8967A;
+  --color-link-hover: #d97e5f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg-primary: #2E3A2A;
+    --color-bg-secondary: #3A4A35;
+    --color-text-primary: #F5F2E8;
+    --color-text-secondary: #DCE5D3;
+    --color-text-muted: #9FBC94;
+    --color-border: #5C7A54;
+    --color-border-light: #4A5C44;
+    --color-button-primary: #8FAF82;
+    --color-button-hover: #A8C4A2;
+  }
+}
+
+/* CSS 초기화 */
+* {
+  box-sizing: border-box;
+}
+
+/* HTML, Body 초기화 */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-bg-secondary);
+}
+
+/* Root 앱 컨테이너 설정 */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
