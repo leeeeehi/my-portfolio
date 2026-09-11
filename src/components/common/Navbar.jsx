@@ -59,8 +59,9 @@ function Navbar() {
                     color: 'var(--color-link-hover)',
                   },
                   '&.active': {
-                    color: 'var(--color-button-primary)',
-                    borderBottom: '2px solid var(--color-button-primary)',
+                    color: 'var(--color-text-primary)',
+                    fontWeight: 700,
+                    borderBottom: '2px solid var(--color-accent)',
                   },
                 }}
               >
