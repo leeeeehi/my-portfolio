@@ -1,10 +1,11 @@
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 
 /**
  * GuestbookList 컴포넌트
- * 등록된 방명록 목록을 최신순으로 보여줍니다.
+ * 등록된 방명록 목록을 카드 그리드로 최신순 표시합니다.
  *
  * Props:
  * @param {Array} entries - 방명록 항목 배열 { id, name, message, rating, created_at } [Required]
@@ -31,31 +32,43 @@ function GuestbookList({ entries, isLoading = false }) {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, maxHeight: 280, overflowY: 'auto', pr: 1 }}>
+    <Grid container spacing={2}>
       {entries.map((entry) => (
-        <Box
-          key={entry.id}
-          sx={{
-            border: '1px solid var(--color-secondary)',
-            borderRadius: 2,
-            p: 1.5,
-            opacity: 0.92,
-          }}
-        >
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
-            <Typography sx={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--color-secondary)' }}>
-              {entry.name}
+        <Grid key={entry.id} size={{ xs: 12, sm: 6, md: 4 }}>
+          <Box
+            sx={{
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 1,
+              backgroundColor: 'var(--color-secondary)',
+              border: '1px solid var(--color-border-light)',
+              borderRadius: 2,
+              p: 2,
+            }}
+          >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography sx={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>
+                {entry.name}
+              </Typography>
+              {entry.rating ? (
+                <Rating value={entry.rating} size="small" readOnly sx={{ color: 'var(--color-accent)' }} />
+              ) : null}
+            </Box>
+            <Typography
+              sx={{
+                fontSize: '0.9rem',
+                lineHeight: 1.6,
+                color: 'var(--color-text-secondary)',
+                flexGrow: 1,
+              }}
+            >
+              {entry.message}
             </Typography>
-            {entry.rating ? (
-              <Rating value={entry.rating} size="small" readOnly sx={{ color: 'var(--color-accent)' }} />
-            ) : null}
           </Box>
-          <Typography sx={{ fontSize: '0.85rem', color: 'var(--color-secondary)', lineHeight: 1.5 }}>
-            {entry.message}
-          </Typography>
-        </Box>
+        </Grid>
       ))}
-    </Box>
+    </Grid>
   );
 }
 
