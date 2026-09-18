@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
+import { formatDate } from '../../utils/format-date.js';
 
 /**
  * GuestbookList 컴포넌트
@@ -64,6 +65,9 @@ function GuestbookList({ entries, isLoading = false }) {
               }}
             >
               {entry.message}
+            </Typography>
+            <Typography sx={{ fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>
+              {formatDate(entry.created_at)}
             </Typography>
           </Box>
         </Grid>
