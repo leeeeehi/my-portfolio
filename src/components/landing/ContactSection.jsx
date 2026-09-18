@@ -12,7 +12,7 @@ import useGuestbook from '../../hooks/useGuestbook.js';
  * Home 페이지 최하단 Contact 섹션. 좌측 방명록 작성/목록, 우측 연락처·SNS 정보로 구성됩니다.
  */
 function ContactSection() {
-  const { entries, isLoading, isSubmitting, addEntry } = useGuestbook();
+  const { entries, totalCount, isLoading, isSubmitting, addEntry } = useGuestbook();
 
   return (
     <SectionWrapper id="contact" bgColor="var(--color-primary-dark)" maxWidth="lg">
@@ -37,17 +37,21 @@ function ContactSection() {
       </Grid>
 
       <Box>
-        <Typography
-          variant="h3"
-          sx={{
-            fontSize: { xs: '1.2rem', md: '1.4rem' },
-            color: 'var(--color-secondary)',
-            fontWeight: 700,
-            mb: 2,
-          }}
-        >
-          방명록
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 2 }}>
+          <Typography
+            variant="h3"
+            sx={{
+              fontSize: { xs: '1.2rem', md: '1.4rem' },
+              color: 'var(--color-secondary)',
+              fontWeight: 700,
+            }}
+          >
+            방명록
+          </Typography>
+          <Typography sx={{ fontSize: '0.85rem', color: 'var(--color-secondary)', opacity: 0.6 }}>
+            총 {totalCount}개
+          </Typography>
+        </Box>
         <GuestbookList entries={entries} isLoading={isLoading} />
       </Box>
     </SectionWrapper>

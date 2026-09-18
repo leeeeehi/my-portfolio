@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase.js';
 
-const ENTRY_LIMIT = 20;
+const ENTRY_LIMIT = 100;
 
 /**
  * useGuestbook 훅
@@ -10,15 +10,16 @@ const ENTRY_LIMIT = 20;
  */
 function useGuestbook() {
   const [entries, setEntries] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchEntries = useCallback(async () => {
     setIsLoading(true);
-    const { data, error: fetchError } = await supabase
+    const { data, error: fetchError, count } = await supabase
       .from('guestbook_public')
-      .select('id, name, message, rating, created_at')
+      .select('id, name, message, rating, created_at', { count: 'exact' })
       .order('created_at', { ascending: false })
       .limit(ENTRY_LIMIT);
 
@@ -26,6 +27,7 @@ function useGuestbook() {
       setError(fetchError.message);
     } else {
       setEntries(data ?? []);
+      setTotalCount(count ?? (data ?? []).length);
       setError(null);
     }
     setIsLoading(false);
@@ -55,7 +57,7 @@ function useGuestbook() {
     return true;
   }, [fetchEntries]);
 
-  return { entries, isLoading, isSubmitting, error, addEntry };
+  return { entries, totalCount, isLoading, isSubmitting, error, addEntry };
 }
 
 export default useGuestbook;
