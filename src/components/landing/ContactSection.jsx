@@ -1,56 +1,43 @@
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import SectionWrapper from '../ui/SectionWrapper.jsx';
-
-const PLACEHOLDER_SNS = ['Email', 'GitHub', 'LinkedIn', 'Instagram'];
+import GuestbookForm from './GuestbookForm.jsx';
+import GuestbookList from './GuestbookList.jsx';
+import ContactInfo from './ContactInfo.jsx';
+import useGuestbook from '../../hooks/useGuestbook.js';
 
 /**
  * ContactSection 컴포넌트
- * Home 페이지 최하단 Contact 섹션. 연락처/SNS/메시지 폼이 들어갈 자리를 안내합니다.
+ * Home 페이지 최하단 Contact 섹션. 좌측 방명록 작성/목록, 우측 연락처·SNS 정보로 구성됩니다.
  */
 function ContactSection() {
+  const { entries, isLoading, isSubmitting, addEntry } = useGuestbook();
+
   return (
-    <SectionWrapper id="contact" bgColor="var(--color-primary-dark)">
-      <Box sx={{ textAlign: 'center' }}>
-        <Typography
-          variant="h2"
-          sx={{
-            fontSize: { xs: '1.6rem', md: '2.2rem' },
-            color: 'var(--color-secondary)',
-            mb: 2,
-          }}
-        >
-          Contact
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: { xs: '1rem', md: '1.2rem' },
-            lineHeight: 1.6,
-            color: 'var(--color-secondary)',
-            mb: 3,
-          }}
-        >
-          여기는 Contact 섹션입니다. 연락처, SNS, 간단한 메시지 폼이 들어갈 예정입니다.
-        </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: { xs: 2, md: 3 }, flexWrap: 'wrap' }}>
-          {PLACEHOLDER_SNS.map((sns) => (
-            <Typography
-              key={sns}
-              sx={{
-                fontSize: '0.9rem',
-                color: 'var(--color-secondary)',
-                border: '1px solid var(--color-secondary)',
-                borderRadius: 4,
-                px: 2,
-                py: 0.5,
-                opacity: 0.85,
-              }}
-            >
-              {sns}
-            </Typography>
-          ))}
-        </Box>
-      </Box>
+    <SectionWrapper id="contact" bgColor="var(--color-primary-dark)" maxWidth="lg">
+      <Typography
+        variant="h2"
+        sx={{
+          fontSize: { xs: '1.6rem', md: '2.2rem' },
+          color: 'var(--color-secondary)',
+          textAlign: 'center',
+          mb: { xs: 3, md: 5 },
+        }}
+      >
+        Contact
+      </Typography>
+      <Grid container spacing={{ xs: 4, md: 6 }}>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <GuestbookForm onSubmit={addEntry} isSubmitting={isSubmitting} />
+            <GuestbookList entries={entries} isLoading={isLoading} />
+          </Box>
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <ContactInfo />
+        </Grid>
+      </Grid>
     </SectionWrapper>
   );
 }
