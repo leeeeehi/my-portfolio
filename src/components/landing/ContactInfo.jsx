@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import EmailIcon from '@mui/icons-material/Email';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -19,8 +21,20 @@ const SNS_LINKS = [
  * 이메일 연락처와 SNS 아이콘 버튼을 아이콘+텍스트 형태로 보여줍니다.
  */
 function ContactInfo() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(CONTACT_EMAIL);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      setCopied(false);
+    }
+  };
+
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, alignSelf: 'flex-start' }}>
       <Box>
         <Typography
           variant="h3"
@@ -45,18 +59,26 @@ function ContactInfo() {
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <EmailIcon sx={{ color: 'var(--color-secondary)', fontSize: '1.2rem' }} />
-          <Box
-            component="a"
-            href={`mailto:${CONTACT_EMAIL}`}
-            sx={{
-              fontSize: { xs: '0.95rem', md: '1rem' },
-              color: 'var(--color-secondary)',
-              textDecoration: 'none',
-              '&:hover': { textDecoration: 'underline' },
-            }}
-          >
-            {CONTACT_EMAIL}
-          </Box>
+          <Tooltip title={copied ? '복사됨!' : '클릭해서 이메일 복사'} placement="top" arrow>
+            <Box
+              component="button"
+              type="button"
+              onClick={handleCopyEmail}
+              sx={{
+                fontSize: { xs: '0.95rem', md: '1rem' },
+                color: 'var(--color-secondary)',
+                backgroundColor: 'transparent',
+                border: 'none',
+                padding: 0,
+                fontFamily: 'inherit',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                '&:hover': { textDecoration: 'underline' },
+              }}
+            >
+              {CONTACT_EMAIL}
+            </Box>
+          </Tooltip>
         </Box>
       </Box>
 

@@ -27,7 +27,7 @@ function ContactSection() {
       >
         Contact
       </Typography>
-      <Grid container spacing={{ xs: 4, md: 6 }} sx={{ mb: { xs: 5, md: 7 } }}>
+      <Grid container spacing={{ xs: 4, md: 6 }} sx={{ mb: { xs: 5, md: 7 }, alignItems: 'flex-start' }}>
         <Grid size={{ xs: 12, md: 6 }}>
           <GuestbookForm onSubmit={addEntry} isSubmitting={isSubmitting} />
         </Grid>
