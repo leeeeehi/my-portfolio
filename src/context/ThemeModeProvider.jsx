@@ -3,8 +3,7 @@ import ThemeModeContext from './theme-mode-context.js';
 
 /** index.html 의 초기화 스크립트와 같은 키를 써야 합니다. */
 const STORAGE_KEY = 'portfolio-theme';
-const TRANSITION_CLASS = 'theme-transition';
-const TRANSITION_MS = 500;
+const INSTANT_CLASS = 'theme-instant';
 
 /** 저장된 사용자 선택을 읽습니다. (저장소를 쓸 수 없는 환경에서는 null) */
 function readStoredMode() {
@@ -17,24 +16,24 @@ function readStoredMode() {
 }
 
 /**
- * <html data-theme> 를 바꿔 CSS 변수를 전환합니다.
- * isInstant 가 아니면 색이 부드럽게 바뀌도록 잠시 전환용 클래스를 붙입니다.
- * (원형으로 퍼지는 화면 전환을 쓸 때는 색 페이드가 겹치지 않도록 isInstant 로 즉시 바꿉니다.)
+ * <html data-theme> 를 바꿔 CSS 변수를 전환합니다. 전환 효과 없이 바로 바뀝니다.
+ * 버튼·링크 등이 저마다 가진 색 전환(transition)이 잠깐 보이지 않도록,
+ * 바꾸는 순간에만 모든 전환을 끄는 클래스를 붙였다가 다음 화면에서 뗍니다.
  */
-function applyMode(mode, isInstant = false) {
+function applyMode(mode) {
   const root = document.documentElement;
-  if (!isInstant) {
-    root.classList.add(TRANSITION_CLASS);
-    window.setTimeout(() => root.classList.remove(TRANSITION_CLASS), TRANSITION_MS);
-  }
+  root.classList.add(INSTANT_CLASS);
   root.setAttribute('data-theme', mode);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => root.classList.remove(INSTANT_CLASS));
+  });
 }
 
 /**
  * ThemeModeProvider 컴포넌트
  * 라이트/다크 모드를 관리합니다.
  * - 처음 값은 index.html 의 초기화 스크립트가 정해 둔 <html data-theme> 를 그대로 따릅니다. (깜빡임 방지)
- * - 토글하면 선택을 localStorage 에 저장합니다. toggleMode({ isInstant: true }) 는 색 페이드 없이 바로 바꿉니다.
+ * - 토글하면 효과 없이 바로 바뀌고, 선택을 localStorage 에 저장합니다.
  * - 저장된 선택이 없으면 시스템 설정(prefers-color-scheme)이 바뀔 때 따라갑니다.
  *
  * Props:
@@ -48,9 +47,9 @@ function ThemeModeProvider({ children }) {
     document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
   ));
 
-  const toggleMode = useCallback(({ isInstant = false } = {}) => {
+  const toggleMode = useCallback(() => {
     const next = mode === 'dark' ? 'light' : 'dark';
-    applyMode(next, isInstant);
+    applyMode(next);
     try {
       window.localStorage.setItem(STORAGE_KEY, next);
     } catch {

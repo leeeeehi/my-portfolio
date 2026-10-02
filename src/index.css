@@ -65,20 +65,12 @@
   --color-link-hover: #FFB088;
 }
 
-/* 테마를 바꾸는 동안에만 색이 부드럽게 바뀌도록 잠시 붙이는 클래스 */
-html.theme-transition,
-html.theme-transition *,
-html.theme-transition *::before,
-html.theme-transition *::after {
-  transition: background-color 0.45s ease, color 0.45s ease, border-color 0.45s ease, fill 0.45s ease,
-    stroke 0.45s ease !important;
-}
-
-/* 테마 토글의 원형 전환: 기본 교차 페이드를 끄고, 새 화면을 clip-path 로 직접 펼친다 (ThemeToggle.jsx) */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
+/* 테마를 바꾸는 순간에만 붙이는 클래스: 모든 전환을 꺼서 색이 효과 없이 바로 바뀌게 한다 */
+html.theme-instant,
+html.theme-instant *,
+html.theme-instant *::before,
+html.theme-instant *::after {
+  transition: none !important;
 }
 
 /* CSS 초기화 */
