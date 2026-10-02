@@ -1,19 +1,20 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import LinearProgress from '@mui/material/LinearProgress';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import { Link as RouterLink } from 'react-router-dom';
 import SectionWrapper from '../ui/SectionWrapper.jsx';
-
-const PLACEHOLDER_SKILLS = [
-  { name: 'Skill A', value: 70 },
-  { name: 'Skill B', value: 55 },
-  { name: 'Skill C', value: 40 },
-];
+import SkillCard from './SkillCard.jsx';
+import usePortfolio from '../../hooks/usePortfolio.js';
 
 /**
  * SkillTreeSection 컴포넌트
- * Home 페이지의 Skill Tree 섹션. 기술 스택 시각화(트리/프로그레스바)가 들어갈 자리를 안내합니다.
+ * Home 페이지의 Skill Tree 섹션. PortfolioContext 의 homeData 로부터 숙련도 상위 스킬을
+ * 아이콘 + 이름 카드로 보여주고, '전체 스킬 보기' 버튼으로 About Me 탭으로 이동합니다.
  */
 function SkillTreeSection() {
+  const { homeData } = usePortfolio();
+
   return (
     <SectionWrapper id="skills" bgColor="var(--color-primary-light)">
       <Box sx={{ textAlign: 'center' }}>
@@ -35,29 +36,29 @@ function SkillTreeSection() {
             mb: 4,
           }}
         >
-          여기는 Skill Tree 섹션입니다. 기술 스택을 트리나 프로그레스바로 시각화할 예정입니다.
+          기본기부터 차근차근, 지금까지 쌓아 온 기술들입니다.
         </Typography>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, maxWidth: 400, mx: 'auto' }}>
-          {PLACEHOLDER_SKILLS.map((skill) => (
-            <Box key={skill.name} sx={{ textAlign: 'left' }}>
-              <Typography sx={{ fontSize: '0.9rem', color: 'var(--color-text-primary)', mb: 0.5 }}>
-                {skill.name}
-              </Typography>
-              <LinearProgress
-                variant="determinate"
-                value={skill.value}
-                sx={{
-                  height: 8,
-                  borderRadius: 4,
-                  backgroundColor: 'var(--color-border-light)',
-                  '& .MuiLinearProgress-bar': {
-                    backgroundColor: 'var(--color-button-primary)',
-                  },
-                }}
-              />
-            </Box>
+        <Grid container spacing={2} sx={{ justifyContent: 'center', mb: 4 }}>
+          {homeData.skills.map((skill) => (
+            <Grid key={skill.id} size={{ xs: 6, md: 3 }}>
+              <SkillCard name={skill.name} value={skill.level} icon={skill.icon} />
+            </Grid>
           ))}
-        </Box>
+        </Grid>
+        <Button
+          component={RouterLink}
+          to="/about"
+          variant="contained"
+          sx={{
+            backgroundColor: 'var(--color-button-primary)',
+            color: 'var(--color-secondary)',
+            '&:hover': {
+              backgroundColor: 'var(--color-button-hover)',
+            },
+          }}
+        >
+          전체 스킬 보기
+        </Button>
       </Box>
     </SectionWrapper>
   );
