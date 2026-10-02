@@ -1,6 +1,11 @@
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import ProjectCard from './ProjectCard.jsx';
+import ProjectCardSkeleton from './ProjectCardSkeleton.jsx';
+import Reveal from '../ui/Reveal.jsx';
+
+const SKELETON_COUNT = 3;
+const STAGGER_MS = 140;
 
 const statusTextSx = {
   fontSize: { xs: '1rem', md: '1.1rem' },
@@ -9,9 +14,13 @@ const statusTextSx = {
   textAlign: 'center',
 };
 
+const gridSx = { justifyContent: 'center' };
+const itemSize = { xs: 12, sm: 6, md: 4 };
+
 /**
  * ProjectGrid 컴포넌트
  * 프로젝트 목록을 카드 그리드(데스크톱 3열 / 태블릿 2열 / 모바일 1열)로 표시합니다.
+ * 불러오는 동안에는 스켈레톤 카드를 보여주고, 카드는 화면에 들어올 때 차례로 나타납니다.
  *
  * Props:
  * @param {Array} projects - 프로젝트 배열 [Required]
@@ -23,7 +32,15 @@ const statusTextSx = {
  */
 function ProjectGrid({ projects, isLoading = false, error = null }) {
   if (isLoading) {
-    return <Typography sx={statusTextSx}>프로젝트를 불러오는 중...</Typography>;
+    return (
+      <Grid container spacing={{ xs: 2, md: 3 }} sx={gridSx} role="status" aria-label="프로젝트를 불러오는 중">
+        {Array.from({ length: SKELETON_COUNT }, (_, index) => (
+          <Grid key={index} size={itemSize}>
+            <ProjectCardSkeleton />
+          </Grid>
+        ))}
+      </Grid>
+    );
   }
 
   if (error) {
@@ -35,10 +52,12 @@ function ProjectGrid({ projects, isLoading = false, error = null }) {
   }
 
   return (
-    <Grid container spacing={{ xs: 2, md: 3 }} sx={{ justifyContent: 'center' }}>
-      {projects.map((project) => (
-        <Grid key={project.id} size={{ xs: 12, sm: 6, md: 4 }}>
-          <ProjectCard project={project} />
+    <Grid container spacing={{ xs: 2, md: 3 }} sx={gridSx}>
+      {projects.map((project, index) => (
+        <Grid key={project.id} size={itemSize}>
+          <Reveal delay={index * STAGGER_MS} sx={{ height: '100%' }}>
+            <ProjectCard project={project} />
+          </Reveal>
         </Grid>
       ))}
     </Grid>

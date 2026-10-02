@@ -2,6 +2,8 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import SectionWrapper from '../ui/SectionWrapper.jsx';
+import Reveal from '../ui/Reveal.jsx';
+import CountUp from '../ui/CountUp.jsx';
 import GuestbookForm from './GuestbookForm.jsx';
 import GuestbookList from './GuestbookList.jsx';
 import ContactInfo from './ContactInfo.jsx';
@@ -16,23 +18,29 @@ function ContactSection() {
 
   return (
     <SectionWrapper id="contact" bgColor="var(--color-primary-dark)" maxWidth="lg">
-      <Typography
-        variant="h2"
-        sx={{
-          fontSize: { xs: '1.6rem', md: '2.2rem' },
-          color: 'var(--color-secondary)',
-          textAlign: 'center',
-          mb: { xs: 3, md: 5 },
-        }}
-      >
-        Contact
-      </Typography>
+      <Reveal>
+        <Typography
+          variant="h2"
+          sx={{
+            fontSize: { xs: '1.6rem', md: '2.2rem' },
+            color: 'var(--color-secondary)',
+            textAlign: 'center',
+            mb: { xs: 3, md: 5 },
+          }}
+        >
+          Contact
+        </Typography>
+      </Reveal>
       <Grid container spacing={{ xs: 4, md: 6 }} sx={{ mb: { xs: 5, md: 7 }, alignItems: 'flex-start' }}>
         <Grid size={{ xs: 12, md: 6 }}>
-          <GuestbookForm onSubmit={addEntry} isSubmitting={isSubmitting} />
+          <Reveal direction="left">
+            <GuestbookForm onSubmit={addEntry} isSubmitting={isSubmitting} />
+          </Reveal>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <ContactInfo />
+          <Reveal direction="right" delay={120}>
+            <ContactInfo />
+          </Reveal>
         </Grid>
       </Grid>
 
@@ -49,7 +57,7 @@ function ContactSection() {
             방명록
           </Typography>
           <Typography sx={{ fontSize: '0.85rem', color: 'var(--color-secondary)', opacity: 0.6 }}>
-            총 {totalCount}개
+            총 <CountUp value={totalCount} />개
           </Typography>
         </Box>
         <GuestbookList entries={entries} isLoading={isLoading} />

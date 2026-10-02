@@ -5,9 +5,11 @@ import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
 import { Link as RouterLink } from 'react-router-dom';
 import SectionWrapper from '../ui/SectionWrapper.jsx';
+import Reveal from '../ui/Reveal.jsx';
 import SkillIcon from '../ui/SkillIcon.jsx';
 import ProfileCard from '../about/ProfileCard.jsx';
 import usePortfolio from '../../hooks/usePortfolio.js';
+import { filledButtonSx } from '../../utils/interaction-styles.js';
 
 /**
  * AboutSection 컴포넌트
@@ -20,24 +22,28 @@ function AboutSection() {
 
   return (
     <SectionWrapper id="about" bgColor="var(--color-bg-secondary)">
-      <Typography
-        variant="h2"
-        sx={{
-          fontSize: { xs: '1.6rem', md: '2.2rem' },
-          color: 'var(--color-text-primary)',
-          textAlign: 'center',
-          mb: { xs: 3, md: 5 },
-        }}
-      >
-        About Me
-      </Typography>
+      <Reveal>
+        <Typography
+          variant="h2"
+          sx={{
+            fontSize: { xs: '1.6rem', md: '2.2rem' },
+            color: 'var(--color-text-primary)',
+            textAlign: 'center',
+            mb: { xs: 3, md: 5 },
+          }}
+        >
+          About Me
+        </Typography>
+      </Reveal>
 
       <Grid container spacing={{ xs: 3, md: 5 }} sx={{ mb: 4 }}>
         <Grid size={{ xs: 12, md: 4 }} sx={{ order: { xs: 0, md: 1 } }}>
-          <ProfileCard basicInfo={basicInfo} isCompact />
+          <Reveal direction="right" delay={120} sx={{ height: '100%' }}>
+            <ProfileCard basicInfo={basicInfo} isCompact />
+          </Reveal>
         </Grid>
         <Grid size={{ xs: 12, md: 8 }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <Reveal direction="left" sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             {content.map((item) => (
               <Box key={item.id}>
                 <Typography
@@ -80,7 +86,7 @@ function AboutSection() {
                 />
               ))}
             </Box>
-          </Box>
+          </Reveal>
         </Grid>
       </Grid>
 
@@ -89,13 +95,7 @@ function AboutSection() {
           component={RouterLink}
           to="/about"
           variant="contained"
-          sx={{
-            backgroundColor: 'var(--color-button-primary)',
-            color: 'var(--color-secondary)',
-            '&:hover': {
-              backgroundColor: 'var(--color-button-hover)',
-            },
-          }}
+          sx={filledButtonSx}
         >
           더 알아보기
         </Button>

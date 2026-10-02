@@ -4,7 +4,9 @@ import Button from '@mui/material/Button';
 import { Link as RouterLink } from 'react-router-dom';
 import SectionWrapper from '../ui/SectionWrapper.jsx';
 import ProjectGrid from './ProjectGrid.jsx';
+import Reveal from '../ui/Reveal.jsx';
 import useProjects from '../../hooks/useProjects.js';
+import { outlinedButtonSx } from '../../utils/interaction-styles.js';
 
 const FEATURED_COUNT = 3;
 
@@ -18,16 +20,18 @@ function ProjectsSection() {
   return (
     <SectionWrapper id="projects" bgColor="var(--color-bg-secondary)" maxWidth="lg">
       <Box sx={{ textAlign: 'center' }}>
-        <Typography
-          variant="h2"
-          sx={{
-            fontSize: { xs: '1.6rem', md: '2.2rem' },
-            color: 'var(--color-text-primary)',
-            mb: { xs: 3, md: 5 },
-          }}
-        >
-          Projects
-        </Typography>
+        <Reveal>
+          <Typography
+            variant="h2"
+            sx={{
+              fontSize: { xs: '1.6rem', md: '2.2rem' },
+              color: 'var(--color-text-primary)',
+              mb: { xs: 3, md: 5 },
+            }}
+          >
+            Projects
+          </Typography>
+        </Reveal>
         <Box sx={{ mb: 4 }}>
           <ProjectGrid projects={projects.slice(0, FEATURED_COUNT)} isLoading={isLoading} error={error} />
         </Box>
@@ -35,15 +39,7 @@ function ProjectsSection() {
           component={RouterLink}
           to="/projects"
           variant="outlined"
-          sx={{
-            borderColor: 'var(--color-button-primary)',
-            color: 'var(--color-button-primary)',
-            '&:hover': {
-              borderColor: 'var(--color-button-hover)',
-              color: 'var(--color-button-hover)',
-              backgroundColor: 'transparent',
-            },
-          }}
+          sx={outlinedButtonSx}
         >
           더 보기
         </Button>

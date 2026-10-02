@@ -5,20 +5,20 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Slider from '@mui/material/Slider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { keyframes } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import SkillIcon from '../ui/SkillIcon.jsx';
+import useInView from '../../hooks/useInView.js';
+import useCountUp from '../../hooks/useCountUp.js';
 import { SKILL_CATEGORIES } from '../../utils/skill-utils.js';
+import { cardLiftSx, iconSpinGlowSx } from '../../utils/interaction-styles.js';
 
-/** 프로그레스 바가 0 에서 실제 숙련도까지 차오르는 애니메이션 */
-const fillBar = keyframes`
-  from { transform: translateX(-100%); }
-`;
+const COUNT_DURATION_MS = 1300;
 
 /**
  * SkillItem 컴포넌트
  * 스킬 하나를 아이콘 + 기술명 + 숙련도 퍼센트 바 카드로 표시하고, 호버 시 설명 툴팁을 보여줍니다.
+ * 화면에 들어오면 퍼센트 바와 숫자가 0 부터 함께 차오르고, 호버 시 아이콘이 돌며 빛납니다.
  * 그 기술을 사용한 프로젝트가 있으면 카드 아래에 함께 보여줍니다.
  * onLevelChange 가 주어지면 연필 버튼으로 숙련도를 바꿀 수 있습니다.
  * (카드 표면색은 다크모드에서도 크림색으로 유지되므로, 카드 안의 글자색은
@@ -35,8 +35,10 @@ function SkillItem({ skill, onLevelChange }) {
   const { id, icon, name, level, category, description, projects = [] } = skill;
   const [isEditing, setIsEditing] = useState(false);
   const [draftLevel, setDraftLevel] = useState(level);
+  const [ref, isInView] = useInView({ threshold: 0.4 });
+  const countedLevel = useCountUp(level, isInView, COUNT_DURATION_MS);
   const categoryColor = SKILL_CATEGORIES[category]?.color ?? 'primary.dark';
-  const shownLevel = isEditing ? draftLevel : level;
+  const shownLevel = isEditing ? draftLevel : countedLevel;
 
   const handleToggleEdit = () => {
     if (isEditing) {
@@ -50,6 +52,8 @@ function SkillItem({ skill, onLevelChange }) {
   return (
     <Tooltip title={isEditing ? '' : description} placement="top" arrow>
       <Box
+        ref={ref}
+        className="skill-hover-parent"
         sx={{
           height: '100%',
           backgroundColor: 'var(--color-secondary)',
@@ -58,19 +62,19 @@ function SkillItem({ skill, onLevelChange }) {
           borderLeftColor: categoryColor,
           borderRadius: 2,
           p: 2,
-          transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-          '&:hover': {
-            transform: 'translateY(-4px)',
-            boxShadow: '0 8px 18px rgba(0, 0, 0, 0.14)',
-          },
+          ...cardLiftSx,
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-          <SkillIcon icon={icon} sx={{ color: categoryColor }} />
+          <Box sx={iconSpinGlowSx}>
+            <SkillIcon icon={icon} sx={{ color: categoryColor }} />
+          </Box>
           <Typography sx={{ flexGrow: 1, fontSize: '1rem', fontWeight: 700, color: 'text.primary' }}>
             {name}
           </Typography>
-          <Typography sx={{ fontSize: '0.9rem', fontWeight: 700, color: 'text.secondary' }}>
+          <Typography
+            sx={{ fontSize: '0.9rem', fontWeight: 700, color: 'text.secondary', fontVariantNumeric: 'tabular-nums' }}
+          >
             {shownLevel}%
           </Typography>
           {onLevelChange ? (
@@ -99,8 +103,8 @@ function SkillItem({ skill, onLevelChange }) {
           ) : (
             <LinearProgress
               variant="determinate"
-              value={level}
-              aria-label={`${name} 숙련도`}
+              value={countedLevel}
+              aria-label={`${name} 숙련도 ${level}%`}
               sx={{
                 width: '100%',
                 height: 8,
@@ -109,7 +113,8 @@ function SkillItem({ skill, onLevelChange }) {
                 '& .MuiLinearProgress-bar': {
                   borderRadius: 4,
                   backgroundColor: categoryColor,
-                  animation: `${fillBar} 1.1s ease-out`,
+                  // 숫자 카운팅과 정확히 같이 움직이도록 MUI 기본 전환을 끈다.
+                  transition: 'none',
                 },
               }}
             />

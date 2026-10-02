@@ -24,6 +24,7 @@ function SectionWrapper({ id, bgColor = 'var(--color-bg-secondary)', maxWidth = 
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
+        scrollMarginTop: { xs: '56px', md: '64px' },
         backgroundColor: bgColor,
         borderBottom: '1px solid var(--color-border-light)',
         py: { xs: 4, md: 8 },

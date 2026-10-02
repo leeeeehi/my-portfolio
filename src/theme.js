@@ -33,7 +33,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif',
     h1: {
       fontWeight: 700,
     },
@@ -46,6 +46,13 @@ const theme = createTheme({
   },
   spacing: 8,
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          backgroundColor: 'var(--color-bg-secondary)',
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {

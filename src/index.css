@@ -28,36 +28,57 @@
   --color-link-hover: #d97e5f;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Primary Colors - 더 선명하고 채도 높은 그린 */
-    --color-primary: #7FBF74;
-    --color-primary-light: #9ED393;
-    --color-primary-dark: #3E5C38;
+/* 다크모드: index.html 의 초기화 스크립트와 ThemeModeProvider 가 <html data-theme> 를 설정한다 */
+:root {
+  color-scheme: light;
+}
 
-    /* Secondary Colors */
-    --color-secondary: #F0E9D8;
-    --color-accent: #FF9466;
+:root[data-theme='dark'] {
+  color-scheme: dark;
 
-    /* Background Colors */
-    --color-bg-primary: #1C2620;
-    --color-bg-secondary: #26332C;
+  /* Primary Colors - 더 선명하고 채도 높은 그린 */
+  --color-primary: #7FBF74;
+  --color-primary-light: #9ED393;
+  --color-primary-dark: #3E5C38;
 
-    /* Text Colors */
-    --color-text-primary: #F5F2E8;
-    --color-text-secondary: #DCE5D3;
-    --color-text-muted: #9FBC94;
+  /* Secondary Colors */
+  --color-secondary: #F0E9D8;
+  --color-accent: #FF9466;
 
-    /* Border Colors */
-    --color-border: #5C7A54;
-    --color-border-light: #3D4C38;
+  /* Background Colors */
+  --color-bg-primary: #1C2620;
+  --color-bg-secondary: #26332C;
 
-    /* Interactive Colors */
-    --color-button-primary: #7FBF74;
-    --color-button-hover: #9ED393;
-    --color-link: #FF9466;
-    --color-link-hover: #FFB088;
-  }
+  /* Text Colors */
+  --color-text-primary: #F5F2E8;
+  --color-text-secondary: #DCE5D3;
+  --color-text-muted: #9FBC94;
+
+  /* Border Colors */
+  --color-border: #5C7A54;
+  --color-border-light: #3D4C38;
+
+  /* Interactive Colors */
+  --color-button-primary: #7FBF74;
+  --color-button-hover: #9ED393;
+  --color-link: #FF9466;
+  --color-link-hover: #FFB088;
+}
+
+/* 테마를 바꾸는 동안에만 색이 부드럽게 바뀌도록 잠시 붙이는 클래스 */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color 0.45s ease, color 0.45s ease, border-color 0.45s ease, fill 0.45s ease,
+    stroke 0.45s ease !important;
+}
+
+/* 테마 토글의 원형 전환: 기본 교차 페이드를 끄고, 새 화면을 clip-path 로 직접 펼친다 (ThemeToggle.jsx) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 /* CSS 초기화 */
